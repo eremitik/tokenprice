@@ -63,7 +63,6 @@ const crypto = {
   'SNX': 'havven',
   'SOC': 'all-sports',
   'SRM': 'serum',
-  /*
   'STORJ': 'storj',
   'SUSHI': 'sushi',
   'SXP': 'swipe',
@@ -77,104 +76,95 @@ const crypto = {
   'YFI': 'yearn-finance',
   'YFII': 'yfii-finance',
   'ZRX': '0x'
-  */
 }
 
 
 const cryptoNames = Object.values(crypto)
+const tickers = Object.keys(crypto)
 const days = 7
 
 
 const urlCrypto = (crypto) => {
   let cryptoArr = []
-  let cryptos = Object.values(crypto)
-  for(let i=0; i<cryptos.length; i++){
-    cryptoArr.push(axios.get(`https://api.coingecko.com/api/v3/coins/${cryptos[i]}/market_chart?vs_currency=usd&days=${days}&interval=daily`))
+  for(let i=0; i<cryptoNames.length; i++){
+    //cryptoArr.push(axios.get(`https://api.coingecko.com/api/v3/coins/${cryptoNames[i]}/market_chart?vs_currency=usd&days=${days}&interval=daily`))
+    cryptoArr.push(`https://api.coingecko.com/api/v3/coins/${cryptoNames[i]}/market_chart?vs_currency=usd&days=${days}&interval=daily`)
   }
   return cryptoArr
 }
 const url = urlCrypto(crypto)
-const tickers = Object.keys(crypto)
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 
 function App() {
 
-  const [coins, setCoins] = useState({})
+  const [coins, setCoins] = useState({ data: [] })
 
-  const fetchData = async () => {                                                                                                     
-          await axios                                                                                                                     
-          .all(url)                                                                                                              
-          //.get(`https://api.coingecko.com/api/v3/coins/${cryptoNames[names]}/market_chart?vs_currency=usd&days=${days}&interval=daily`) 
-          .then(axios.spread((...u)=>{                                                                                                    
-                                                                                                                                          
-          let objU = {}                                                                                                                   
-          let chunk =days+1                                                                                                               
-          let newObj = {}                                                                                                                 
-          let allPrices = []                                                                                                              
-          let splitPrices = []                                                                                                            
-                                                                                                                                          
-          for(let i=0; i<url.length; i++){                                                                                       
-            objU[tickers[i]] = u[i].data.prices                                                                                           
-          }                                                                                                                               
-                                                                                                                                          
-          for (let line in objU){                                                                                                         
-            for (let k=0; k<chunk; k++){                                                                                                  
-              allPrices.push(objU[line][k][1])                                                                                            
-            }                                                                                                                             
-          }                                                                                                                               
-                                                                                                                                          
-          for (let i=0; i<allPrices.length; i+=chunk){                                                                                    
-            splitPrices.push(allPrices.slice(i,i+chunk))                                                                                  
-          }                                                                                                                               
-                                                                                                                                          
-          for (let j=0; j<splitPrices.length; j++){                                                                                       
-              newObj[tickers[j]] = splitPrices[j]                                                                                         
-          }                                                                                                                               
-          setCoins(newObj)                                                                                                                
-        }))                                                                                                                               
-          .catch(error=>console.error(error)) 
+  const fetchUrl = async (url, index) => {
+    let priceArray = []
+    let coinObj = {}
+    return await axios.get(url).then((response) => {
+      const prices = response.data.prices;
+      for (let i=0; i<prices.length; i++){
+        priceArray.push(prices[i][1])
+      }
+      coinObj.symbol = tickers[index]
+      coinObj.prices = priceArray
+      return coinObj
+    })
   }
 
-    
+  const fetchData = () => {
+    (async () => {
+      let arrayQ = [];
+      for (let i=0; i<url.length; i++){
+        await delay(800);
+        await fetchUrl(url[i], i).then((coinObj) => {
+          arrayQ.push(coinObj);
+          setCoins({ data: [...data, coinObj] });
+        })
+        setCoins({ data: [...arrayQ] })
+      }
+    })()
+  }
+ 
   useEffect(()=>{                                                                                                                     
       fetchData();                                                                                                                        
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);                                                                                                                                
-    console.log('coins', coins)                                                                                                           
 
+  const {data} = coins
 
   return (
     <div className="coin-app">
-      <thead>
+      <table className="coin-table"> 
+        <thead>
         <tr>
-          <th>Symbol</th>
-          <th>T-8</th>
-          <th>T-7</th>
-          <th>T-6</th>
-          <th>T-5</th>
-          <th>T-4</th>
-          <th>T-3</th>
-          <th>T-2</th>
-          <th>T-1</th>
+          <th style={{width:'50px'}}>Symbol</th>
+          <th style={{width:'150px'}}>T-8</th>
+          <th style={{width:'150px'}}>T-7</th>
+          <th style={{width:'150px'}}>T-6</th>
+          <th style={{width:'150px'}}>T-5</th>
+          <th style={{width:'150px'}}>T-4</th>
+          <th style={{width:'150px'}}>T-3</th>
+          <th style={{width:'150px'}}>T-2</th>
+          <th style={{width:'150px'}}>T-1</th>
         </tr>
-      </thead>
+        </thead>
       <tbody>
-        {Object.keys(coins).map(function(key, index){
-          return(
-            <tr key={key}>
-              <td>{key}</td>
-              <td>{coins[key][0]}</td>
-              <td>{coins[key][1]}</td>
-              <td>{coins[key][2]}</td>
-              <td>{coins[key][3]}</td>
-              <td>{coins[key][4]}</td>
-              <td>{coins[key][5]}</td>
-              <td>{coins[key][6]}</td>
-              <td>{coins[key][7]}</td>
+        {data.map(function (coin, index) {
+          return (
+            <tr key={coin.symbol}>
+              <td>{coin.symbol}</td>
+              {coin.prices.map((price, index) => {
+                return <td key={index}>{price}</td>
+              })}
             </tr>
-          )  
+          );
         })}
       </tbody>
-      </div>
+      </table>
+    </div>
   );
 }
 
