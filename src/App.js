@@ -37,7 +37,7 @@ const crypto = {
   'HT': 'huobi-token',
   'KNC': 'kyber-network',
   'LEO': 'leo-token',
-  'LINK': 'link',
+  'LINK': 'chainlink',
   'LRC': 'loopring',
   'MANA': 'decentraland',
   'MATIC': 'matic-network',
@@ -95,6 +95,16 @@ const urlCrypto = (crypto) => {
 const url = urlCrypto(crypto)
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
+/*
+// calculate vol
+let retArr = {} 
+
+Object.keys(newObj).map(function(key, index){
+    console.log(key, newObj[key])
+    retArr[key] = newObj[key].reduce((a,b)=>a+b)/newObj[key].length
+})  
+console.log('retArr', retArr)
+*/
 
 function App() {
 
