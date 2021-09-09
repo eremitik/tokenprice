@@ -74,7 +74,7 @@ const crypto = {
   'OXT': 'orchid-protocol',
   'PAXG': 'pax-gold',
   'PNT': 'pnetwork',
-  'POLY': 'polymath-network',
+  'POLY': 'polymath',
   'POND': 'marlin',
   'POWR': 'power-ledger',
   'PUNDIX': 'pundi-x-2',
