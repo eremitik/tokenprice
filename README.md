@@ -1,8 +1,9 @@
-# Spot prices over the past week from Coingecko API
+# TokenPX
 
 ![home](./home.png)
 
-Visit the project [here](https://tokenpx.netlify.app).
+Shows the spot prices of tokens listed on [Pokket](https://pokket.com/) over the past week from Coingecko API\
+Visit the project [here](https://tokenpx.netlify.app).\
 
 ## Quick start
 
@@ -12,7 +13,7 @@ yarn start
 ```
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.\
 
 ## Technologies used
 
