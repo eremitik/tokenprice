@@ -1,6 +1,6 @@
 # Token Price
 
-Shows the spot prices of tokens listed on [Pokket](https://pokket.com/) over the past week from Coingecko API\
+Shows the spot prices of tokens listed on [Pokket](https://pokket.com/) over the past week from Coingecko API.\
 Visit the project [here](https://tokenpx.netlify.app).
 ![home](./home.png)
 
