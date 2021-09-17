@@ -99,6 +99,7 @@ const crypto = {
   'VALUE': 'value-liquidity',
   'WABI': 'wabi',
   'wBTC': 'wrapped-bitcoin',
+  'XRP': 'ripple',
   'YFI': 'yearn-finance',
   'YFII': 'yfii-finance',
   'ZRX': '0x'
