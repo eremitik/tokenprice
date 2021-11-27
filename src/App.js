@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -14,6 +14,7 @@ const crypto = {
   'APPC': 'appcoins',
   'AST': 'airswap',
   'AUDIO': 'audius',
+  'AVAX': 'avalanche-2',
   'AXS': 'axie-infinity',
   'BAL': 'balancer',
   'BAND': 'band-protocol',
@@ -113,7 +114,7 @@ const days = 7
 
 const urlCrypto = (crypto) => {
   let cryptoArr = []
-  for(let i=0; i<cryptoNames.length; i++){
+  for (let i = 0; i < cryptoNames.length; i++) {
     //cryptoArr.push(axios.get(`https://api.coingecko.com/api/v3/coins/${cryptoNames[i]}/market_chart?vs_currency=usd&days=${days}&interval=daily`))
     cryptoArr.push(`https://api.coingecko.com/api/v3/coins/${cryptoNames[i]}/market_chart?vs_currency=usd&days=${days}&interval=daily`)
   }
@@ -142,7 +143,7 @@ function App() {
     let coinObj = {}
     return await axios.get(url).then((response) => {
       const prices = response.data.prices;
-      for (let i=0; i<prices.length; i++){
+      for (let i = 0; i < prices.length; i++) {
         priceArray.push(prices[i][1])
       }
       coinObj.symbol = tickers[index]
@@ -154,7 +155,7 @@ function App() {
   const fetchData = () => {
     (async () => {
       let arrayQ = [];
-      for (let i=0; i<url.length; i++){
+      for (let i = 0; i < url.length; i++) {
         await delay(800);
         await fetchUrl(url[i], i).then((coinObj) => {
           arrayQ.push(coinObj);
@@ -164,42 +165,42 @@ function App() {
       }
     })()
   }
- 
-  useEffect(()=>{                                                                                                                     
-      fetchData();                                                                                                                        
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);                                                                                                                                
 
-  const {data} = coins
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { data } = coins
 
   return (
     <div className="coin-app">
-      <table className="coin-table"> 
+      <table className="coin-table">
         <thead>
-        <tr>
-          <th style={{width:'50px'}}>Symbol</th>
-          <th style={{width:'150px'}}>T-8</th>
-          <th style={{width:'150px'}}>T-7</th>
-          <th style={{width:'150px'}}>T-6</th>
-          <th style={{width:'150px'}}>T-5</th>
-          <th style={{width:'150px'}}>T-4</th>
-          <th style={{width:'150px'}}>T-3</th>
-          <th style={{width:'150px'}}>T-2</th>
-          <th style={{width:'150px'}}>T-1</th>
-        </tr>
+          <tr>
+            <th style={{ width: '50px' }}>Symbol</th>
+            <th style={{ width: '150px' }}>T-8</th>
+            <th style={{ width: '150px' }}>T-7</th>
+            <th style={{ width: '150px' }}>T-6</th>
+            <th style={{ width: '150px' }}>T-5</th>
+            <th style={{ width: '150px' }}>T-4</th>
+            <th style={{ width: '150px' }}>T-3</th>
+            <th style={{ width: '150px' }}>T-2</th>
+            <th style={{ width: '150px' }}>T-1</th>
+          </tr>
         </thead>
-      <tbody>
-        {data.map(function (coin, index) {
-          return (
-            <tr key={coin.symbol}>
-              <td>{coin.symbol}</td>
-              {coin.prices.map((price, index) => {
-                return <td key={index}>{price}</td>
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
+        <tbody>
+          {data.map(function (coin, index) {
+            return (
+              <tr key={coin.symbol}>
+                <td>{coin.symbol}</td>
+                {coin.prices.map((price, index) => {
+                  return <td key={index}>{price}</td>
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     </div>
   );
